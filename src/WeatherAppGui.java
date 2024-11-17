@@ -38,10 +38,8 @@ public class WeatherAppGui extends JFrame {
     private void addGuiComponents(){
         // search field
         JTextField searchTextField = new JTextField();
-
         // set the location and size of our component
         searchTextField.setBounds(15, 15, 351, 45);
-
         // change the font style and size
         searchTextField.setFont(new Font("Dialog", Font.PLAIN, 24));
 
