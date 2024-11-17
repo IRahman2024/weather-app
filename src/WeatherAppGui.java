@@ -50,13 +50,13 @@ public class WeatherAppGui extends JFrame {
         // weather image
         //by default ki show korbe
         JLabel weatherConditionImage = new JLabel(loadImage("src/assets/cloudy.png"));
-        weatherConditionImage.setBounds(0, 125, 450, 217);
+        weatherConditionImage.setBounds(0, 105, 450, 217);
         add(weatherConditionImage);
 
         // temperature text
         //by default ki show korbe
         JLabel temperatureText = new JLabel("-- C");
-        temperatureText.setBounds(0, 350, 450, 54);
+        temperatureText.setBounds(0, 320, 450, 54);
         temperatureText.setFont(new Font("Dialog", Font.BOLD, 48));
 
         // center the text
@@ -66,32 +66,46 @@ public class WeatherAppGui extends JFrame {
         // weather condition description
         //cloudy na sunny show korbe
         JLabel weatherConditionDesc = new JLabel("Cloudy");
-        weatherConditionDesc.setBounds(0, 405, 450, 36);
+        weatherConditionDesc.setBounds(0, 380, 450, 36);
         weatherConditionDesc.setFont(new Font("Dialog", Font.PLAIN, 32));
         weatherConditionDesc.setHorizontalAlignment(SwingConstants.CENTER);
         add(weatherConditionDesc);
 
         // humidity image
         JLabel humidityImage = new JLabel(loadImage("src/assets/humidity.png"));
-        humidityImage.setBounds(15, 500, 74, 66);
+        humidityImage.setBounds(15, 490, 74, 66);
         add(humidityImage);
 
         // humidity text
         JLabel humidityText = new JLabel("<html><b>Humidity</b> -- </html>");
-        humidityText.setBounds(90, 500, 85, 55);
+        humidityText.setBounds(90, 510, 85, 55);
         humidityText.setFont(new Font("Dialog", Font.PLAIN, 16));
         add(humidityText);
 
         // windspeed image
         JLabel windspeedImage = new JLabel(loadImage("src/assets/windspeed.png"));
-        windspeedImage.setBounds(220, 500, 74, 66);
+        windspeedImage.setBounds(220, 510, 74, 66);
         add(windspeedImage);
 
         // windspeed text
         JLabel windspeedText = new JLabel("<html><b>Windspeed</b> --km/h</html>");
-        windspeedText.setBounds(310, 500, 85, 55);
+        windspeedText.setBounds(310, 510, 85, 55);
         windspeedText.setFont(new Font("Dialog", Font.PLAIN, 16));
         add(windspeedText);
+
+        // minimum temperature
+        JLabel maxTemperatureText = new JLabel("Max Temp: -- C"); 
+        maxTemperatureText.setBounds(0, 425, 450, 36); 
+        maxTemperatureText.setFont(new Font("Dialog", Font.PLAIN, 24));
+        maxTemperatureText.setHorizontalAlignment(SwingConstants.CENTER); 
+        add(maxTemperatureText);
+        
+        // maximum temperature
+        JLabel minTemperatureText = new JLabel("Min Temp: -- C");
+        minTemperatureText.setBounds(0, 455, 450, 36);
+        minTemperatureText.setFont(new Font("Dialog", Font.PLAIN, 24));
+        minTemperatureText.setHorizontalAlignment(SwingConstants.CENTER);
+        add(minTemperatureText);
 
         // search button
         JButton searchButton = new JButton(loadImage("src/assets/search.png"));
@@ -149,7 +163,15 @@ public class WeatherAppGui extends JFrame {
                 // update windspeed text
                 double windspeed = (double) weatherData.get("windspeed");
                 windspeedText.setText("<html><b>Windspeed</b> " + windspeed + "km/h</html>");
-            }
+            
+                // update maximum temperature
+                double maxTemperature = (double) weatherData.get("max_temperature");
+                maxTemperatureText.setText("Max Temp: " + maxTemperature + " C");
+                
+                // update minimum temperature
+                double minTemperature = (double) weatherData.get("min_temperature");
+                minTemperatureText.setText("Min Temp: " + minTemperature + " C");
+                            }
         });
         add(searchButton);
     }
@@ -170,12 +192,3 @@ public class WeatherAppGui extends JFrame {
         return null;
     }
 }
-
-
-
-
-
-
-
-
-

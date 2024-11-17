@@ -26,8 +26,12 @@ public class WeatherApp {
         // build API request URL with location coordinates
         String urlString = "https://api.open-meteo.com/v1/forecast?" +
                 "latitude=" + latitude + "&longitude=" + longitude +
-                "&hourly=temperature_2m,relativehumidity_2m,weathercode,windspeed_10m&timezone=America%2FLos_Angeles";
-
+                "&hourly=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min&timezone=auto";
+        // // build API request URL with location coordinates
+        // String urlString = "https://api.open-meteo.com/v1/forecast?" +
+        //         "latitude=" + latitude + "&longitude=" + longitude +
+        //         "&hourly=temperature_2m,relativehumidity_2m,weathercode,windspeed_10m&timezone=America%2FLos_Angeles";
+//https://api.open-meteo.com/v1/forecast?latitude=23.7104&longitude=90.4074&hourly=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min&timezone=auto
         try{
             // call api and get response
             HttpURLConnection conn = fetchApiResponse(urlString);
@@ -59,27 +63,41 @@ public class WeatherApp {
 
             // retrieve hourly data
             JSONObject hourly = (JSONObject) resultJsonObj.get("hourly");
+            
+            //retrieve daily data
+            JSONObject daily = (JSONObject) resultJsonObj.get("daily");
 
             // we want to get the current hour's data
             // so we need to get the index of our current hour
             JSONArray time = (JSONArray) hourly.get("time");
             int index = findIndexOfCurrentTime(time);
 
+            //to get current day index
+            JSONArray dayList = (JSONArray) daily.get("time"); int dayIndex = findIndexOfCurrentDay(dayList);
+
             // get temperature
             JSONArray temperatureData = (JSONArray) hourly.get("temperature_2m");
             double temperature = (double) temperatureData.get(index);
 
             // get weather code
-            JSONArray weathercode = (JSONArray) hourly.get("weathercode");
+            JSONArray weathercode = (JSONArray) hourly.get("weather_code");
             String weatherCondition = convertWeatherCode((long) weathercode.get(index));
 
             // get humidity
-            JSONArray relativeHumidity = (JSONArray) hourly.get("relativehumidity_2m");
+            JSONArray relativeHumidity = (JSONArray) hourly.get("relative_humidity_2m");
             long humidity = (long) relativeHumidity.get(index);
 
             // get windspeed
-            JSONArray windspeedData = (JSONArray) hourly.get("windspeed_10m");
+            JSONArray windspeedData = (JSONArray) hourly.get("wind_speed_10m");
             double windspeed = (double) windspeedData.get(index);
+
+            // get max temperature
+            JSONArray maxTemperatureData = (JSONArray) daily.get("temperature_2m_max"); 
+            double maxTemperature = (double) maxTemperatureData.get(dayIndex); 
+            
+            // get min temperature
+            JSONArray minTemperatureData = (JSONArray) daily.get("temperature_2m_min"); 
+            double minTemperature = (double) minTemperatureData.get(dayIndex);
 
             // build the weather json data object that we are going to access in our frontend
             JSONObject weatherData = new JSONObject();
@@ -87,6 +105,7 @@ public class WeatherApp {
             weatherData.put("weather_condition", weatherCondition);
             weatherData.put("humidity", humidity);
             weatherData.put("windspeed", windspeed);
+            weatherData.put("max_temperature", maxTemperature); weatherData.put("min_temperature", minTemperature);
 
             return weatherData;
         }catch(Exception e){
@@ -195,6 +214,35 @@ public class WeatherApp {
         return formattedDateTime;
     }
 
+    private static int findIndexOfCurrentDay(JSONArray dayList) {
+        String currentDay = getCurrentDay();
+    
+        // Iterate through the day list and see which one matches our current day
+        for (int i = 0; i < dayList.size(); i++) {
+            String day = (String) dayList.get(i);
+            if (day.equalsIgnoreCase(currentDay)) {
+                // Return the index
+                return i;
+            }
+        }
+    
+        // Default to 0 if no match found
+        return 0;
+    }
+    
+    private static String getCurrentDay() {
+        // Get current date
+        LocalDateTime currentDate = LocalDateTime.now();
+    
+        // Format date to be yyyy-MM-dd (this is how it is read in the API)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    
+        // Format and print the current date
+        String formattedDate = currentDate.format(formatter);
+    
+        return formattedDate;
+    }
+    
     // convert the weather code to something more readable
     private static String convertWeatherCode(long weathercode){
         String weatherCondition = "";
@@ -216,10 +264,3 @@ public class WeatherApp {
         return weatherCondition;
     }
 }
-
-
-
-
-
-
-
