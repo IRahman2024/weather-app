@@ -39,8 +39,8 @@ public class WeatherAppGui extends JFrame {
 
         // Background image
         backgroundLabel = new JLabel();
-        backgroundLabel.setBounds(0, 0, 450, 650);
-        backgroundLabel.setIcon(new ImageIcon("src/assets/clear_sky.gif")); // Directly use ImageIcon for GIF
+        backgroundLabel.setBounds(0, 0, getWidth(), getHeight());
+        backgroundLabel.setIcon(loadImage("src/assets/clear_sky.gif", true));
         layeredPane.add(backgroundLabel, JLayeredPane.DEFAULT_LAYER);
 
         // Foreground components
@@ -114,19 +114,19 @@ public class WeatherAppGui extends JFrame {
                     switch (weatherCondition) {
                         case "Clear":
                             weatherConditionImage.setIcon(loadImage("src/assets/clear.png", false));
-                            backgroundLabel.setIcon(new ImageIcon("src/assets/clear_sky.gif")); // Use ImageIcon for GIF
+                            backgroundLabel.setIcon(loadImage("src/assets/clear_sky.gif", true));
                             break;
                         case "Cloudy":
                             weatherConditionImage.setIcon(loadImage("src/assets/cloudy.png", false));
-                            backgroundLabel.setIcon(new ImageIcon("src/assets/cloudy_animate.gif")); // Use ImageIcon for GIF
+                            backgroundLabel.setIcon(loadImage("src/assets/cloudy_animate.gif", true));
                             break;
                         case "Rain":
                             weatherConditionImage.setIcon(loadImage("src/assets/rain.png", false));
-                            backgroundLabel.setIcon(new ImageIcon("src/assets/rainy_animate.gif")); // Use ImageIcon for GIF
+                            backgroundLabel.setIcon(loadImage("src/assets/rainy_animate.gif", true));
                             break;
                         case "Snow":
                             weatherConditionImage.setIcon(loadImage("src/assets/snow.png", false));
-                            backgroundLabel.setIcon(new ImageIcon("src/assets/snow_background.gif")); // Use ImageIcon for GIF
+                            backgroundLabel.setIcon(loadImage("src/assets/snow_background.gif", true));
                             break;
                     }
 
