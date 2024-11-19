@@ -1,5 +1,4 @@
 import org.json.simple.JSONObject;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -11,182 +10,189 @@ import java.io.IOException;
 
 public class WeatherAppGui extends JFrame {
     private JSONObject weatherData;
+    private JLayeredPane layeredPane;
+    private JLabel backgroundLabel;
+    private JLabel weatherConditionImage;
+    private JLabel temperatureText;
+    private JLabel weatherConditionDesc;
+    private JLabel maxTemperatureText;
+    private JLabel minTemperatureText;
+    private JLabel humidityImage;
+    private JLabel humidityText;
+    private JLabel windSpeedImage;
+    private JLabel windSpeedText;
 
-    public WeatherAppGui(){
-        // setup our gui and add a title
+    public WeatherAppGui() {
         super("Weather App");
-
-        // configure gui to end the program's process once it has been closed
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        // set the size of our gui (in pixels)
         setSize(450, 650);
-
-        // load our gui at the center of the screen
         setLocationRelativeTo(null);
-
-        // make our layout manager null to manually position our components within the gui
-        setLayout(null);
-
-        // prevent any resize of our gui
-        // setResizable(true);###############
         setResizable(false);
-
         addGuiComponents();
     }
 
-    private void addGuiComponents(){
-        // search field
+    private void addGuiComponents() {
+        // Create layered pane
+        layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(new Dimension(450, 650));
+        setContentPane(layeredPane);
+
+        // Background image
+        backgroundLabel = new JLabel();
+        backgroundLabel.setBounds(0, 0, 450, 650);
+        backgroundLabel.setIcon(new ImageIcon("src/assets/clear_sky.gif")); // Directly use ImageIcon for GIF
+        layeredPane.add(backgroundLabel, JLayeredPane.DEFAULT_LAYER);
+
+        // Foreground components
         JTextField searchTextField = new JTextField();
-        // set the location and size of our component
         searchTextField.setBounds(15, 15, 351, 45);
-        // change the font style and size
         searchTextField.setFont(new Font("Dialog", Font.PLAIN, 24));
+        layeredPane.add(searchTextField, JLayeredPane.PALETTE_LAYER);
 
-        add(searchTextField);
-
-        // weather image
-        //by default ki show korbe
-        JLabel weatherConditionImage = new JLabel(loadImage("src/assets/cloudy.png"));
+        weatherConditionImage = new JLabel(loadImage("src/assets/cloudy.png", false));
         weatherConditionImage.setBounds(0, 105, 450, 217);
-        add(weatherConditionImage);
+        layeredPane.add(weatherConditionImage, JLayeredPane.PALETTE_LAYER);
 
-        // temperature text
-        //by default ki show korbe
-        JLabel temperatureText = new JLabel("-- C");
+        temperatureText = new JLabel("-- C");
         temperatureText.setBounds(0, 320, 450, 54);
         temperatureText.setFont(new Font("Dialog", Font.BOLD, 48));
-
-        // center the text
         temperatureText.setHorizontalAlignment(SwingConstants.CENTER);
-        add(temperatureText);
+        layeredPane.add(temperatureText, JLayeredPane.PALETTE_LAYER);
 
-        // weather condition description
-        //cloudy na sunny show korbe
-        JLabel weatherConditionDesc = new JLabel("Cloudy");
+        weatherConditionDesc = new JLabel("Cloudy");
         weatherConditionDesc.setBounds(0, 380, 450, 36);
         weatherConditionDesc.setFont(new Font("Dialog", Font.PLAIN, 32));
         weatherConditionDesc.setHorizontalAlignment(SwingConstants.CENTER);
-        add(weatherConditionDesc);
+        layeredPane.add(weatherConditionDesc, JLayeredPane.PALETTE_LAYER);
 
-        // humidity image
-        JLabel humidityImage = new JLabel(loadImage("src/assets/humidity.png"));
-        humidityImage.setBounds(15, 490, 74, 66);
-        add(humidityImage);
-
-        // humidity text
-        JLabel humidityText = new JLabel("<html><b>Humidity</b> -- </html>");
-        humidityText.setBounds(90, 510, 85, 55);
-        humidityText.setFont(new Font("Dialog", Font.PLAIN, 16));
-        add(humidityText);
-
-        // windspeed image
-        JLabel windspeedImage = new JLabel(loadImage("src/assets/windspeed.png"));
-        windspeedImage.setBounds(220, 510, 74, 66);
-        add(windspeedImage);
-
-        // windspeed text
-        JLabel windspeedText = new JLabel("<html><b>Windspeed</b> --km/h</html>");
-        windspeedText.setBounds(310, 510, 85, 55);
-        windspeedText.setFont(new Font("Dialog", Font.PLAIN, 16));
-        add(windspeedText);
-
-        // minimum temperature
-        JLabel maxTemperatureText = new JLabel("Max Temp: -- C"); 
-        maxTemperatureText.setBounds(0, 425, 450, 36); 
+        maxTemperatureText = new JLabel("Max Temp: -- C");
+        maxTemperatureText.setBounds(0, 425, 450, 36);
         maxTemperatureText.setFont(new Font("Dialog", Font.PLAIN, 24));
-        maxTemperatureText.setHorizontalAlignment(SwingConstants.CENTER); 
-        add(maxTemperatureText);
-        
-        // maximum temperature
-        JLabel minTemperatureText = new JLabel("Min Temp: -- C");
+        maxTemperatureText.setHorizontalAlignment(SwingConstants.CENTER);
+        layeredPane.add(maxTemperatureText, JLayeredPane.PALETTE_LAYER);
+
+        minTemperatureText = new JLabel("Min Temp: -- C");
         minTemperatureText.setBounds(0, 455, 450, 36);
         minTemperatureText.setFont(new Font("Dialog", Font.PLAIN, 24));
         minTemperatureText.setHorizontalAlignment(SwingConstants.CENTER);
-        add(minTemperatureText);
+        layeredPane.add(minTemperatureText, JLayeredPane.PALETTE_LAYER);
 
-        // search button
-        JButton searchButton = new JButton(loadImage("src/assets/search.png"));
+        humidityImage = new JLabel(loadImage("src/assets/humidity.png", false));
+        humidityImage.setBounds(15, 490, 74, 66);
+        layeredPane.add(humidityImage, JLayeredPane.PALETTE_LAYER);
 
-        // change the cursor to a hand cursor when hovering over this button
+        humidityText = new JLabel("<html><b>Humidity</b> -- </html>");
+        humidityText.setBounds(90, 510, 85, 55);
+        humidityText.setFont(new Font("Dialog", Font.PLAIN, 16));
+        layeredPane.add(humidityText, JLayeredPane.PALETTE_LAYER);
+
+        windSpeedImage = new JLabel(loadImage("src/assets/windspeed.png", false));
+        windSpeedImage.setBounds(220, 510, 74, 66);
+        layeredPane.add(windSpeedImage, JLayeredPane.PALETTE_LAYER);
+
+        windSpeedText = new JLabel("<html><b>Windspeed</b> --km/h</html>");
+        windSpeedText.setBounds(310, 510, 85, 55);
+        windSpeedText.setFont(new Font("Dialog", Font.PLAIN, 16));
+        layeredPane.add(windSpeedText, JLayeredPane.PALETTE_LAYER);
+
+        JButton searchButton = new JButton(loadImage("src/assets/search.png", false));
         searchButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         searchButton.setBounds(375, 13, 47, 45);
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // get location text from user
                 String userInput = searchTextField.getText();
-
-                // validate input - remove whitespace to ensure non-empty text
-                if(userInput.replaceAll("\\s", "").length() <= 0){
+                if (userInput.replaceAll("\\s", "").length() <= 0) {
                     return;
                 }
 
-                // retrieve weather data
                 weatherData = WeatherApp.getWeatherData(userInput);
                 System.out.println(weatherData);
 
-                // update gui
-
-                // update weather image
                 String weatherCondition = (String) weatherData.get("weather_condition");
+                if (weatherCondition != null) {
+                    switch (weatherCondition) {
+                        case "Clear":
+                            weatherConditionImage.setIcon(loadImage("src/assets/clear.png", false));
+                            backgroundLabel.setIcon(new ImageIcon("src/assets/clear_sky.gif")); // Use ImageIcon for GIF
+                            break;
+                        case "Cloudy":
+                            weatherConditionImage.setIcon(loadImage("src/assets/cloudy.png", false));
+                            backgroundLabel.setIcon(new ImageIcon("src/assets/cloudy_animate.gif")); // Use ImageIcon for GIF
+                            break;
+                        case "Rain":
+                            weatherConditionImage.setIcon(loadImage("src/assets/rain.png", false));
+                            backgroundLabel.setIcon(new ImageIcon("src/assets/rainy_animate.gif")); // Use ImageIcon for GIF
+                            break;
+                        case "Snow":
+                            weatherConditionImage.setIcon(loadImage("src/assets/snow.png", false));
+                            backgroundLabel.setIcon(new ImageIcon("src/assets/snow_background.gif")); // Use ImageIcon for GIF
+                            break;
+                    }
 
-                // depending on the condition, we will update the weather image that corresponds with the condition
-                switch(weatherCondition){
-                    case "Clear":
-                        weatherConditionImage.setIcon(loadImage("src/assets/clear.png"));
-                        break;
-                    case "Cloudy":
-                        weatherConditionImage.setIcon(loadImage("src/assets/cloudy.png"));
-                        break;
-                    case "Rain":
-                        weatherConditionImage.setIcon(loadImage("src/assets/rain.png"));
-                        break;
-                    case "Snow":
-                        weatherConditionImage.setIcon(loadImage("src/assets/snow.pngImage"));
-                        break;
+                    double temperature = (double) weatherData.get("temperature");
+                    temperatureText.setText(temperature + " C");
+
+                    weatherConditionDesc.setText(weatherCondition);
+
+                    long humidity = (long) weatherData.get("humidity");
+                    humidityText.setText("<html><b>Humidity</b> " + humidity + "%</html>");
+
+                    double windspeed = (double) weatherData.get("windspeed");
+                    windSpeedText.setText("<html><b>Windspeed</b> " + windspeed + "km/h</html>");
+
+                    double maxTemperature = (double) weatherData.get("max_temperature");
+                    maxTemperatureText.setText("Max Temp: " + maxTemperature + " C");
+
+                    double minTemperature = (double) weatherData.get("min_temperature");
+                    minTemperatureText.setText("Min Temp: " + minTemperature + " C");
+
+                    // Repaint and revalidate to ensure animations play
+                    backgroundLabel.revalidate();
+                    backgroundLabel.repaint();
+                } else {
+                    System.out.println("weather_condition key not found in the JSON response");
                 }
-
-                // update temperature text
-                double temperature = (double) weatherData.get("temperature");
-                temperatureText.setText(temperature + " C");
-
-                // update weather condition text
-                weatherConditionDesc.setText(weatherCondition);
-
-                // update humidity text
-                long humidity = (long) weatherData.get("humidity");
-                humidityText.setText("<html><b>Humidity</b> " + humidity + "%</html>");
-
-                // update windspeed text
-                double windspeed = (double) weatherData.get("windspeed");
-                windspeedText.setText("<html><b>Windspeed</b> " + windspeed + "km/h</html>");
-            
-                // update maximum temperature
-                double maxTemperature = (double) weatherData.get("max_temperature");
-                maxTemperatureText.setText("Max Temp: " + maxTemperature + " C");
-                
-                // update minimum temperature
-                double minTemperature = (double) weatherData.get("min_temperature");
-                minTemperatureText.setText("Min Temp: " + minTemperature + " C");
-                            }
+            }
         });
-        add(searchButton);
+        layeredPane.add(searchButton, JLayeredPane.PALETTE_LAYER);
     }
 
-    // used to create images in our gui components
-    private ImageIcon loadImage(String resourcePath){
-        try{
-            // read the image file from the path given
-            BufferedImage image = ImageIO.read(new File(resourcePath));
+    private ImageIcon loadImage(String resourcePath, boolean scaleToFrame) {
+        try {
+            File file = new File(resourcePath);
+            if (!file.exists()) {
+                System.out.println("File not found: " + file.getAbsolutePath());
+                return null;
+            }
 
-            // returns an image icon so that our component can render it
-            return new ImageIcon(image);
-        }catch(IOException e){
+            BufferedImage image = ImageIO.read(file);
+            if (image == null) {
+                System.out.println("Could not read image: " + resourcePath);
+                return null;
+            }
+
+            ImageIcon imageIcon = new ImageIcon(image);
+
+            if (scaleToFrame) {
+                // Resize the image to fit the JFrame 
+                Image scaledImage = imageIcon.getImage().getScaledInstance(450, 650, Image.SCALE_SMOOTH);
+                return new ImageIcon(scaledImage);
+            } else {
+                return imageIcon;
+            }
+
+        } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Could not read image: " + resourcePath);
         }
-
-        System.out.println("Could not find resource");
         return null;
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            WeatherAppGui gui = new WeatherAppGui();
+            gui.setVisible(true);
+        });
     }
 }
