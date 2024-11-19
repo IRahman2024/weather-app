@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-    <img src="https://github.com/curadProgrammer/WeatherAppGUI-Java/blob/main/Screenshot_15.png?raw=true" align="center">
+    <img src="https://github.com/IRahman2024/weather-app/blob/525ded30e95438d6c42b8147224c62c4412814bf/Screenshot.png" align="center">
 </p>
 
 <h2>Technologies Used</h2>
